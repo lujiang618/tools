@@ -48,4 +48,43 @@ class StringHelper
 
         return Uuid::uuid5(Uuid::NAMESPACE_DNS, $name)->toString();
     }
+
+    /**
+     * @description  生成token
+     * @author       lujiang
+     *
+     * @param int $length
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    public static function randomToken($length = 32){
+        if(!isset($length) || intval($length) <= 8 ){
+            $length = 32;
+        }
+        if (function_exists('random_bytes')) {
+            return bin2hex(random_bytes($length-($length%2)/2));
+        }
+        if (function_exists('mcrypt_create_iv')) {
+            return bin2hex(mcrypt_create_iv($length, MCRYPT_DEV_URANDOM));
+        }
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            return bin2hex(openssl_random_pseudo_bytes($length));
+        }
+    }
+
+    /**
+     * @description  生成一个指定长度的盐
+     * @author       lujiang
+     *
+     * @param int $length
+     * @param int $tokenLength
+     *
+     * @return bool|string
+     *
+     */
+    public static function salt(int $length,int $tokenLength){
+        return substr(strtr(base64_encode(hex2bin(randomToken($tokenLength))), '+', '.'), 0, $length);
+    }
 }
