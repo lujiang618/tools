@@ -12,6 +12,31 @@ namespace Tools\basic;
 class DateHelper
 {
     /**
+     * 获取两个时间点之间所有的日期
+     * 
+     * @param string $startDate
+     * @param string $endDate
+     *
+     * @return array
+     */
+    public static function getDateFromRange(string $startDate, string $endDate) :array
+    {
+        $start = strtotime(date('Y-m-d', strtotime($startDate)));
+        $end   = strtotime(date('Y-m-d', strtotime($endDate)));
+
+        // 计算日期段内有多少天
+        $days = ($end - $start) / 86400 + 1;
+
+        // 保存每天日期
+        $date = [];
+        for ($i = 0 ; $i < $days ; $i++) {
+            $date[] = date('Y-m-d', $start + (86400 * $i));
+        }
+
+        return $date;
+    }
+
+    /**
      * 返回本周开始和结束的时间戳
      *
      * @return array
