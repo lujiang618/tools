@@ -13,7 +13,7 @@ class DateHelper
 {
     /**
      * 获取两个时间点之间所有的日期
-     * 
+     *
      * @param string $startDate
      * @param string $endDate
      *
@@ -34,6 +34,53 @@ class DateHelper
         }
 
         return $date;
+    }
+
+    /**
+     * 判断两个时间段之间是否有交叉（边界相等也算交叉）
+     * @param string $periodOneStart
+     * @param string $periodOneEnd
+     * @param string $periodTwoStart
+     * @param string $periodTwoEnd
+     *
+     * @return bool
+     */
+    public function isCross($periodOneStart = '', $periodOneEnd = '', $periodTwoStart = '', $periodTwoEnd = '') :bool
+    {
+        $status = $periodTwoStart - $periodOneStart;
+
+        if ($status > 0) {
+            $status2 = $periodTwoStart - $periodOneEnd;
+            if ($status2 > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            $status2 = $periodTwoEnd - $periodOneStart;
+            if ($status2 >= 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * 将H:i 格式的时间转换成秒
+     * @param string $hourMinute
+     *
+     * @return int
+     */
+    public static function getMinute(string $hourMinute) :int
+    {
+        list($hour,$minute) = explode(':',$hourMinute);
+
+        if (empty($hour) || empty($minute)) {
+            return 0;
+        }
+
+        return $hour*60+$minute;
     }
 
     /**
